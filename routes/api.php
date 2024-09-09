@@ -2,7 +2,11 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
+use App\Http\Middleware\JwtMiddleware;
+
+/**
+ * Authentication routes
+ */
 
 Route::group([
     'middleware' => 'api',
@@ -13,3 +17,11 @@ Route::group([
     Route::post('refresh', 'AuthController@refresh');
     Route::post('me', 'AuthController@me');
 });
+
+/**
+ * Challenges routes
+ */
+
+Route::get("challenges", 'App\Http\Controllers\ChallengesController@getAllChallenges')->middleware(JwtMiddleware::class);
+Route::get("challenge/{id}", 'App\Http\Controllers\ChallengesController@getChallengeByID')->middleware(JwtMiddleware::class);
+Route::get("challenge/{id}/books", 'App\Http\Controllers\ChallengesController@getBooksOfChallenge')->middleware(JwtMiddleware::class);
