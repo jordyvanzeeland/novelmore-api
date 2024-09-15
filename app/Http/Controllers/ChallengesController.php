@@ -8,13 +8,24 @@ use Illuminate\Http\Request;
 class ChallengesController extends Controller
 {
     /**
-     * Function to get all challenges
+     * Function to get all active challenges
      * Only the challenges, that are added by the authenticated user, will be visible
      */
 
-    public function getAllChallenges(){
+    public function getAllActiveChallenges(){
         $user = auth()->user();
-        $userChallenges = DB::table('challenges')->where('userid', $user['id'])->get();
+        $userChallenges = DB::table('challenges')->where('userid', $user['id'])->where('finished', 0)->get();
+        return $userChallenges;
+    }
+
+    /**
+     * Function to get all finished challenges
+     * Only the challenges, that are added by the authenticated user, will be visible
+     */
+
+    public function getAllFinishedChallenges(){
+        $user = auth()->user();
+        $userChallenges = DB::table('challenges')->where('userid', $user['id'])->where('finished', 1)->get();
         return $userChallenges;
     }
 

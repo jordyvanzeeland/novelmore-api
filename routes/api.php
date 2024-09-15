@@ -22,6 +22,7 @@ Route::group([
  * Challenges routes
  */
 
-Route::get("challenges", 'App\Http\Controllers\ChallengesController@getAllChallenges')->middleware(JwtMiddleware::class);
+Route::get("challenges", 'App\Http\Controllers\ChallengesController@getAllActiveChallenges')->middleware(JwtMiddleware::class);
+Route::get("challenges/finished", 'App\Http\Controllers\ChallengesController@getAllFinishedChallenges')->middleware(JwtMiddleware::class);
 Route::get("challenge/{id}", 'App\Http\Controllers\ChallengesController@getChallengeByID')->middleware(JwtMiddleware::class);
 Route::get("challenge/{id}/books", 'App\Http\Controllers\ChallengesController@getBooksOfChallenge')->middleware(JwtMiddleware::class);
