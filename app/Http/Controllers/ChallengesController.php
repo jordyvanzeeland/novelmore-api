@@ -1,9 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-use DB;
-
 use Illuminate\Http\Request;
+use DB;
 
 class ChallengesController extends Controller
 {
@@ -46,5 +45,36 @@ class ChallengesController extends Controller
     public function getBooksOfChallenge($challengeid){
         $books = DB::table('books')->where('challengeid', $challengeid)->get();
         return $books;
+    }
+
+    public function insertBookToChallenge(Request $request, $challengeid){
+        $user = auth()->user();
+        $data = $request->all();
+
+        if($user && $user['id']){
+            $insertbook = DB::table('books')->insert([
+                'userid' => $user['id'], 'name' => $data['book'], 'author' => $data['author'], "challengeid" => $challengeid
+            ]);
+
+            if($insertbook == '1'){
+                return json_encode("OK");
+            }else{
+                return json_encode("Error");
+            }
+        }
+    }
+
+    public function deleteBookFromChallenge($challengeid, $bookid){
+        $user = auth()->user();
+
+        if($user && $user['id']){
+            $deletebook = DB::table('books')->where('id', $bookid)->where('challengeid', $challengeid)->delete();
+
+            if($deletebook == '1'){
+                return json_encode("OK");
+            }else{
+                return json_encode("Error");
+            }
+        }
     }
 }
