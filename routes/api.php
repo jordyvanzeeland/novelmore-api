@@ -28,3 +28,4 @@ Route::get("challenge/{id}", 'App\Http\Controllers\ChallengesController@getChall
 Route::get("challenge/{id}/books", 'App\Http\Controllers\ChallengesController@getBooksOfChallenge')->middleware(JwtMiddleware::class);
 Route::post("challenge/{id}/book/insert", 'App\Http\Controllers\ChallengesController@insertBookToChallenge')->middleware(JwtMiddleware::class);
 Route::delete("challenge/{id}/book/{bookid}/delete", 'App\Http\Controllers\ChallengesController@deleteBookFromChallenge')->middleware(JwtMiddleware::class);
+Route::put("challenge/{id}/book/{bookid}/readed", 'App\Http\Controllers\ChallengesController@checkBookOfChallenge')->middleware(JwtMiddleware::class);

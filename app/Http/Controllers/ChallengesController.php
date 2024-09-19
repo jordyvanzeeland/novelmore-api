@@ -39,7 +39,8 @@ class ChallengesController extends Controller
     }
 
     /**
-     * Function to get all books that belong to a specified challengeid.
+     * Function to get all books that belong of a challenge.
+     * Specified by a challengeid
      */
 
     public function getBooksOfChallenge($challengeid){
@@ -47,34 +48,41 @@ class ChallengesController extends Controller
         return $books;
     }
 
+    /**
+     * Function to Insert a book to a challenge
+     * Specified by a challengeid
+     */
+
     public function insertBookToChallenge(Request $request, $challengeid){
-        $user = auth()->user();
         $data = $request->all();
+        $user = auth()->user();
 
-        if($user && $user['id']){
-            $insertbook = DB::table('books')->insert([
-                'userid' => $user['id'], 'name' => $data['book'], 'author' => $data['author'], "challengeid" => $challengeid
-            ]);
-
-            if($insertbook == '1'){
-                return json_encode("OK");
-            }else{
-                return json_encode("Error");
-            }
-        }
+        $insertbook = DB::table('books')->insert([
+            'userid' => $user['id'], 'name' => $data['book'], 'author' => $data['author'], "challengeid" => $challengeid
+        ]);
+        return $insertbook;
     }
 
+    /**
+     * Function to delete a book from a challenge
+     * Specified by a challengeid and a bookid
+     */
+
     public function deleteBookFromChallenge($challengeid, $bookid){
-        $user = auth()->user();
+        $deletebook = DB::table('books')->where('id', $bookid)->where('challengeid', $challengeid)->delete();
+        return $deletebook;
+    }
 
-        if($user && $user['id']){
-            $deletebook = DB::table('books')->where('id', $bookid)->where('challengeid', $challengeid)->delete();
+    /**
+     * Function to update the readed status of a book from a challenge
+     * Specified by a challengeid and a bookid
+     */
 
-            if($deletebook == '1'){
-                return json_encode("OK");
-            }else{
-                return json_encode("Error");
-            }
-        }
+    public function checkBookOfChallenge(Request $request, $challengeid, $bookid){
+        $data = $request->all();
+        $updateBook = DB::table('books')->where('id', $bookid)->where('challengeid', $challengeid)->update([
+            'readed' => $data['readed']
+        ]);
+        return $updateBook;
     }
 }
